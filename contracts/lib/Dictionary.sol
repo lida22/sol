@@ -1,4 +1,4 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.5.0;
 
 
 library Dictionary {
@@ -18,7 +18,7 @@ library Dictionary {
         uint len;
     }
 
-    function insertAfter(Data storage self, uint afterId, uint id, bytes data) internal {
+    function insertAfter(Data storage self, uint afterId, uint id, bytes  memory data) internal {
         if (self.list[id].initialized) {
             self.list[id].data = data;
             return;
@@ -37,7 +37,7 @@ library Dictionary {
         self.len++;
     }
 
-    function insertBefore(Data storage self, uint beforeId, uint id, bytes data) internal {
+    function insertBefore(Data storage self, uint beforeId, uint id, bytes memory data) internal {
         if (self.list[id].initialized) {
             self.list[id].data = data;
             return;
@@ -56,7 +56,7 @@ library Dictionary {
         self.len++;
     }
 
-    function insertBeginning(Data storage self, uint id, bytes data) internal {
+    function insertBeginning(Data storage self, uint id, bytes memory data) internal {
         if (self.list[id].initialized) {
             self.list[id].data = data;
             return;
@@ -70,17 +70,17 @@ library Dictionary {
             insertBefore(self, self.firstNodeId, id, data);
     }
 
-    function insertEnd(Data storage self, uint id, bytes data) internal {
+    function insertEnd(Data storage self, uint id, bytes memory data) internal {
         if (self.lastNodeId == NULL) insertBeginning(self, id, data);
         else
             insertAfter(self, self.lastNodeId, id, data);
     }
 
-    function set(Data storage self, uint id, bytes data) internal {
+    function set(Data storage self, uint id, bytes memory data) internal {
         insertEnd(self, id, data);
     }
 
-    function get(Data storage self, uint id) internal view returns (bytes) {
+    function get(Data storage self, uint id) internal view returns (bytes memory) {
         return self.list[id].data;
     }
 
@@ -111,8 +111,8 @@ library Dictionary {
     function prev(Data storage self, uint id) internal view returns (uint) {
         return self.list[id].prev;
     }
-
-    function keys(Data storage self) internal constant returns (uint[]) {
+ 
+    function keys(Data storage self) internal view returns (uint[] memory) {
         uint[] memory arr = new uint[](self.len);
         uint node = self.firstNodeId;
         for (uint i=0; i < self.len; i++) {
